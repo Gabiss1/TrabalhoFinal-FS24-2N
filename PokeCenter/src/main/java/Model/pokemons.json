@@ -1,0 +1,5 @@
+[
+  {"nome":  "Bulabasaur", "tipo_primario":  "Grama", "tipo_secundario":  "Venenoso", "nivel": 5, "hp_maximo":  45, "hp_atual":  45, "fk_id_treinador":  null},
+  {"nome":  "Charmander", "tipo_primario":  "Fogo", "tipo_secundario":  null, "nivel": 5, "hp_maximo":  35, "hp_atual":  35, "fk_id_treinador":  null},
+  {"nome":  "Treecko", "tipo_primario":  "Grama", "tipo_secundario":  null, "nivel": 5, "hp_maximo":  33, "hp_atual":  33, "fk_id_treinador":  null}
+]
