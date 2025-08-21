@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.List;
 
 public class JsonReader {
+    public JsonReader(){}
     public List<Pokemon> lerPokemonsDoJson() throws IOException {
 // Usa o class loader para encontrar o arquivo no classpath (src/main/resources)
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("pokemons.json");

@@ -42,8 +42,7 @@ public class TreinadorController {
         }
     }
 
-    public void updatePoke(int id) throws Exception{
-        Treinador treinador = getTreinadorById(id);
+    public void updateTreinador(Treinador treinador) throws Exception{
         Transaction transaction = null;
         if(treinador.getNome().trim().isEmpty() || treinador.getNome() == null){
             throw new Exception("O Nome do treinador é obrigatório!");

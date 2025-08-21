@@ -1,17 +1,120 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import Controller.PokemonController;
+import Controller.TreinadorController;
+import View.Pokemon.CadastrarPoke;
+import View.Pokemon.ListarPokesPanel;
+import View.Treinador.CadastrarTreinador;
+import View.Treinador.ListarTreinadoresPanel;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+import javax.swing.*;
+
+public class Main extends JFrame {
+    private JDesktopPane desktopPane;
+    private PokemonController pokemonController;
+    private TreinadorController treinadorController;
+
+    public Main() {
+        super("Centro Pokémon");
+        this.pokemonController = new PokemonController();
+        this.treinadorController = new TreinadorController();
+
+        setSize(1000, 700);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        desktopPane = new JDesktopPane();
+        setContentPane(desktopPane);
+
+        createMenuBar();
     }
+
+    private void createMenuBar() {
+        JMenuBar menuBar = new JMenuBar();
+
+        // Menu de Pokémons
+        JMenu menuPokemons = new JMenu("Pokémons");
+        JMenuItem itemCadastrarPokemon = new JMenuItem("Cadastrar Pokémon");
+        JMenuItem itemListarPokemons = new JMenuItem("Listar Pokémons");
+        JMenuItem itemInserirListaPokemons = new JMenuItem("Inserir Lista de Pokémons");
+
+        itemCadastrarPokemon.addActionListener(e -> {
+            try {
+                openPokemonForm(null);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        itemListarPokemons.addActionListener(e -> openListaPokemonsPanel());
+
+        menuPokemons.add(itemCadastrarPokemon);
+        menuPokemons.add(itemListarPokemons);
+        menuPokemons.add(itemInserirListaPokemons);
+
+        menuBar.add(menuPokemons);
+
+        // Menu de Treinadores
+        JMenu menuTreinadores = new JMenu("Treinadores");
+        JMenuItem itemCadastrarTreinador = new JMenuItem("Cadastrar Treinador");
+        JMenuItem itemListarTreinadores = new JMenuItem("Listar Treinador");
+
+        itemCadastrarTreinador.addActionListener(e->{
+            try {
+                openTreinadorForm(null);
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        itemListarTreinadores.addActionListener(e -> openListaTreinadoresPanel());
+
+        menuTreinadores.add(itemCadastrarTreinador);
+        menuTreinadores.add(itemListarTreinadores);
+
+        menuBar.add(menuTreinadores);
+
+        // Menu Sair
+        JMenu menuSair = new JMenu("Sair");
+        JMenuItem itemSair = new JMenuItem("Sair do Sistema");
+        itemSair.addActionListener(e -> System.exit(0));
+
+        menuSair.add(itemSair);
+        menuBar.add(menuSair);
+
+        setJMenuBar(menuBar);
+    }
+
+    private void openPokemonForm(Integer idPokemon) throws Exception {
+        CadastrarPoke cadastroPoke = new CadastrarPoke(pokemonController, idPokemon);
+        desktopPane.add(cadastroPoke);
+        cadastroPoke.setVisible(true);
+        cadastroPoke.toFront();
+    }
+
+    private void openListaPokemonsPanel() {
+        ListarPokesPanel listaPokemons = new ListarPokesPanel(pokemonController);
+        desktopPane.add(listaPokemons);
+        listaPokemons.setVisible(true);
+        listaPokemons.toFront();
+    }
+
+    private void openTreinadorForm(Integer idTreinador) throws Exception {
+        CadastrarTreinador cadastroTreinador = new CadastrarTreinador(treinadorController, idTreinador);
+        desktopPane.add(cadastroTreinador);
+        cadastroTreinador.setVisible(true);
+        cadastroTreinador.toFront();
+    }
+
+    private void openListaTreinadoresPanel() {
+        ListarTreinadoresPanel listaTreinadores = new ListarTreinadoresPanel(treinadorController);
+        desktopPane.add(listaTreinadores);
+        listaTreinadores.setVisible(true);
+        listaTreinadores.toFront();
+    }
+
+    public static void main(String[] args) throws Exception {
+        SwingUtilities.invokeLater(() -> {
+            new Main().setVisible(true);
+        });
+    }
+
 }
