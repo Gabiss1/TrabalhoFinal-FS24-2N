@@ -82,6 +82,7 @@ public class PokemonController {
 
     public Pokemon getPokemonById(int id){
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            System.out.println("Teste");
             return session.get(Pokemon.class, id);
         }
     }
