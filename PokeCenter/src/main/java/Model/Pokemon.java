@@ -27,7 +27,7 @@ public class Pokemon {
     @Column(name = "hp_atual", nullable = false)
     int hp_atual;
 
-    @Column(name = "fk_id_treinador", nullable = false)
+    @Column(name = "fk_id_treinador")
     int fk_id_treinador;
 
     public Pokemon(int id, String nome, String tipo_primario, String tipo_secundario, int nivel, int hp_maximo, int hp_atual, int fk_id_treinador) {
@@ -113,7 +113,7 @@ public class Pokemon {
         return fk_id_treinador;
     }
 
-    public void setFk_id_treinador(int fk_id_treinador) {
+    public void setFk_id_treinador(Integer fk_id_treinador) {
         this.fk_id_treinador = fk_id_treinador;
     }
 }

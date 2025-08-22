@@ -13,6 +13,10 @@ public class CadastrarTreinador extends JInternalFrame {
     private JButton btnSalvar, btnBuscar;
     private Integer treinadorIdParaEdicao;
 
+
+
+    /// vcccccccccc e triiii
+
     public CadastrarTreinador(TreinadorController controller, Integer treinadorId) {
         super("Cadastro de Treinador", true, true, true, true);
         this.controller = controller;

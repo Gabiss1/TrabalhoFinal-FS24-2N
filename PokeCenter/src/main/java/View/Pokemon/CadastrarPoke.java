@@ -18,6 +18,7 @@ public class CadastrarPoke extends JInternalFrame{
     public CadastrarPoke(PokemonController controller, Integer pokemonId) {
         super("Cadastro de Pokémon", true, true, true, true);
         this.controller = controller;
+        this.treinadorController = new TreinadorController();
         this.pokemonIdParaEdicao = pokemonId;
 
         setSize(600, 400);
@@ -83,7 +84,7 @@ public class CadastrarPoke extends JInternalFrame{
 
         // HP Atual
         gbc.gridx = 0; gbc.gridy = row;
-        add(new JLabel("HP Atual (<=HP Máximo):"), gbc);
+        add(new JLabel("HP Atual<= HP Máximo:"), gbc);
         gbc.gridx = 1; gbc.gridy = row; gbc.gridwidth = 2;
         txtHpAtual = new JTextField(25);
         add(txtHpAtual, gbc);

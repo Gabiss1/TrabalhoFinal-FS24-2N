@@ -19,6 +19,7 @@ public class JsonReader {
         ObjectMapper mapper = new ObjectMapper();
 // Usa TypeReference para informar ao Jackson que queremos uma lista de Pokemons
         List<Pokemon> pokemons = mapper.readValue(inputStream, new TypeReference<List<Pokemon>>() {});
+        System.out.println(pokemons.getFirst().getFk_id_treinador());
         return pokemons;
     }
 }

@@ -1,7 +1,9 @@
 package View.Pokemon;
 
 import Controller.PokemonController;
+import Controller.TreinadorController;
 import Model.Pokemon;
+import Model.Treinador;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,6 +12,7 @@ import java.util.List;
 
 public class ListarPokesPanel extends JInternalFrame {
     private PokemonController controller;
+    private TreinadorController treinadorController;
     private JTable tabelaPokemons;
     private DefaultTableModel tableModel;
     private JButton btnAtualizar, btnRemover, btnBuscar, btnEditar;
@@ -18,11 +21,12 @@ public class ListarPokesPanel extends JInternalFrame {
     public ListarPokesPanel(PokemonController controller) {
         super("Lista de Pokémons", true, true, true, true);
         this.controller = controller;
+        this.treinadorController = new TreinadorController();
 
         setSize(900, 500);
         setLayout(new BorderLayout());
 
-        String[] colunas = {"ID", "Nome", "Tipo Primário", "Tipo Secundário", "Nível", "HP Máximo"};
+        String[] colunas = {"ID", "Nome", "Tipo Primário", "Tipo Secundário", "Nível", "HP Máximo", "HP Atual", "Nome Treinador"};
         tableModel = new DefaultTableModel(colunas, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -68,7 +72,7 @@ public class ListarPokesPanel extends JInternalFrame {
                     pokemon.getNivel(),
                     pokemon.getHp_maximo(),
                     pokemon.getHp_atual(),
-                    pokemon.getFk_id_treinador()
+                    treinadorController.getTreinadorById(pokemon.getFk_id_treinador()).getNome()
             });
         }
     }
@@ -114,7 +118,7 @@ public class ListarPokesPanel extends JInternalFrame {
                     pokemon.getNivel(),
                     pokemon.getHp_maximo(),
                     pokemon.getHp_atual(),
-                    pokemon.getFk_id_treinador()
+                    treinadorController.getTreinadorById(pokemon.getFk_id_treinador()).getNome()
             });
         }
     }

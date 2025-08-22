@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Pokemon;
+import Services.JsonReader;
 import Util.HibernateUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hibernate.Session;
@@ -9,7 +10,6 @@ import org.hibernate.query.Query;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.SecureDirectoryStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,15 +65,21 @@ public class PokemonController {
         }
     }
 
-    public void cadastarEmLote(){
-        List<Pokemon> pokemons = new ArrayList<>();
-
+    public void cadastrarEmLote(List<Pokemon> pokemons) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
+        for (Pokemon pokemon : pokemons){
+            pokemon.setFk_id_treinador(null);
+        }
+        System.out.println(pokemons.getFirst().getFk_id_treinador());
         try {
-// O Jackson vai converter a lista em JSON e salvar no arquivo
             mapper.writeValue(new
-                    File("./src/main/resources/pokemons.json"), pokemons);
+                    File("C:\\Users\\GABRIELGARCEZDEOLIVE\\Documents\\Atividades-FS24-2N\\TrabalhoFinal-FS24-2N\\PokeCenter\\src\\main\\resources\\pokemons.json"), pokemons);
             System.out.println("Arquivo 'pokemons_salvos.json' foi criado com sucesso!");
+            System.out.println(pokemons.getFirst().getNome());
+            for (Pokemon pokemon : pokemons){
+                System.out.println(pokemons.getFirst().getFk_id_treinador());
+                cadastrarPokemon(pokemon);
+            }
         } catch (IOException e) {
             System.out.println("Houve um erro ao salvar o arquivo.");
             e.printStackTrace();
@@ -160,7 +166,7 @@ public class PokemonController {
 
     public List<Pokemon> getPokemonByName(String nome){
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            Query<Pokemon> pokemon = session.createQuery("SELECT * FROM Pokemon WHERE nome = :nome", Pokemon.class);
+            Query<Pokemon> pokemon = session.createQuery("FROM Pokemon WHERE nome = :nome", Pokemon.class);
             pokemon.setParameter("nome", nome);
             return pokemon.getResultList();
         }
@@ -181,5 +187,9 @@ public class PokemonController {
             }
             throw new RuntimeException("Erro ao remover Poke: "+ e.getMessage());
         }
+    }
+
+    public void curarPokes(){
+
     }
 }

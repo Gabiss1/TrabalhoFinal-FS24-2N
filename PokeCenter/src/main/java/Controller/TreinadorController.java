@@ -97,7 +97,7 @@ public class TreinadorController {
 
     public Treinador getTreinadorByName(String nome){
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            Query<Treinador> query = session.createQuery("SELECT * FROM Treinador WHERE nome = :nome", Treinador.class);
+            Query<Treinador> query = session.createQuery("FROM Treinador WHERE nome = :nome", Treinador.class);
             query.setParameter("nome", nome);
             return query.getSingleResult();
         }

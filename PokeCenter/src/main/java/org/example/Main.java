@@ -2,12 +2,16 @@ package org.example;
 
 import Controller.PokemonController;
 import Controller.TreinadorController;
+import Model.Pokemon;
+import Services.JsonReader;
 import View.Pokemon.CadastrarPoke;
 import View.Pokemon.ListarPokesPanel;
 import View.Treinador.CadastrarTreinador;
 import View.Treinador.ListarTreinadoresPanel;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.util.List;
 
 public class Main extends JFrame {
     private JDesktopPane desktopPane;
@@ -46,6 +50,13 @@ public class Main extends JFrame {
             }
         });
         itemListarPokemons.addActionListener(e -> openListaPokemonsPanel());
+        itemInserirListaPokemons.addActionListener(e-> {
+            try {
+                cadastrarLoteDePokes();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         menuPokemons.add(itemCadastrarPokemon);
         menuPokemons.add(itemListarPokemons);
@@ -95,6 +106,16 @@ public class Main extends JFrame {
         desktopPane.add(listaPokemons);
         listaPokemons.setVisible(true);
         listaPokemons.toFront();
+    }
+
+    private void cadastrarLoteDePokes() throws IOException {
+        JsonReader reader = new JsonReader();
+        try{
+            List<Pokemon> pokemons = reader.lerPokemonsDoJson();
+            pokemonController.cadastrarEmLote(pokemons);
+        } catch (Exception e){
+            System.out.println("Erro ao ler o Json: "+e.getMessage());
+        }
     }
 
     private void openTreinadorForm(Integer idTreinador) throws Exception {
