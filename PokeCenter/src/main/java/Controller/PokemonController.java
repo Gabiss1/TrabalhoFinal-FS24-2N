@@ -66,20 +66,22 @@ public class PokemonController {
     }
 
     public void cadastrarEmLote(List<Pokemon> pokemons) throws Exception {
+        Transaction transaction = null;
         ObjectMapper mapper = new ObjectMapper();
-        for (Pokemon pokemon : pokemons){
-            pokemon.setFk_id_treinador(null);
-        }
-        System.out.println(pokemons.getFirst().getFk_id_treinador());
-        try {
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
             mapper.writeValue(new
-                    File("C:\\Users\\GABRIELGARCEZDEOLIVE\\Documents\\Atividades-FS24-2N\\TrabalhoFinal-FS24-2N\\PokeCenter\\src\\main\\resources\\pokemons.json"), pokemons);
-            System.out.println("Arquivo 'pokemons_salvos.json' foi criado com sucesso!");
-            System.out.println(pokemons.getFirst().getNome());
-            for (Pokemon pokemon : pokemons){
-                System.out.println(pokemons.getFirst().getFk_id_treinador());
-                cadastrarPokemon(pokemon);
+                    File("C:\\Users\\GABRIEL\\Documents\\TrabalhoFinal-FS24-2N\\PokeCenter\\src\\main\\resources\\pokemons.json"), pokemons);
+//            mapper.writeValue(new
+//                    File("C:\\Users\\GABRIELGARCEZDEOLIVE\\Documents\\Atividades-FS24-2N\\TrabalhoFinal-FS24-2N\\PokeCenter\\src\\main\\resources\\pokemons.json"), pokemons);
+            System.out.println(pokemons.get(2).getNome());
+            for(Pokemon poke : pokemons){
+                System.out.println(poke.getNome());
+                poke.setFkToNull();
+                session.merge(poke);
             }
+            session.flush();
+            transaction.commit();
         } catch (IOException e) {
             System.out.println("Houve um erro ao salvar o arquivo.");
             e.printStackTrace();
@@ -168,6 +170,16 @@ public class PokemonController {
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
             Query<Pokemon> pokemon = session.createQuery("FROM Pokemon WHERE nome = :nome", Pokemon.class);
             pokemon.setParameter("nome", nome);
+            return pokemon.getResultList();
+        }
+    }
+
+    public List<Pokemon> getPokemonByTreinador(String nome){
+        TreinadorController treinadorController = new TreinadorController();
+        int treinador = treinadorController.getTreinadorByName(nome).getId();
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            Query<Pokemon> pokemon = session.createQuery("FROM Pokemon WHERE fk_id_treinador = :treinador", Pokemon.class);
+            pokemon.setParameter("treinador", treinador);
             return pokemon.getResultList();
         }
     }

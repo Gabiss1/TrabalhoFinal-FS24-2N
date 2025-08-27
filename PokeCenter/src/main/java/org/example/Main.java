@@ -83,6 +83,13 @@ public class Main extends JFrame {
 
         menuBar.add(menuTreinadores);
 
+        JMenu menuPokeCenter = new JMenu("Pokecenter");
+        JMenuItem itemCurarPokes = new JMenuItem("Curar Pokémons");
+        JMenuItem itemAdotarPoke = new JMenuItem("Adotar Pokémon");
+
+        menuPokeCenter.add(itemCurarPokes);
+        menuPokeCenter.add(itemAdotarPoke);
+
         // Menu Sair
         JMenu menuSair = new JMenu("Sair");
         JMenuItem itemSair = new JMenuItem("Sair do Sistema");
@@ -112,9 +119,14 @@ public class Main extends JFrame {
         JsonReader reader = new JsonReader();
         try{
             List<Pokemon> pokemons = reader.lerPokemonsDoJson();
+
+            for (int i = 0; i < pokemons.size(); i++){
+                //pokemons.get(i).setFk_id_treinador(null);
+                pokemons.get(i).setId(i+1);
+            }
             pokemonController.cadastrarEmLote(pokemons);
-        } catch (Exception e){
-            System.out.println("Erro ao ler o Json: "+e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 

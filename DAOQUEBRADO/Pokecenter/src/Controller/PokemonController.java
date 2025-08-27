@@ -2,7 +2,9 @@ package Controller;
 
 import Model.DAO.PokemonDAO;
 import Model.Pokemon;
+import Services.JsonReader;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -87,12 +89,18 @@ public class PokemonController {
             throw new Exception("O hp maximo deve ser positivo.");
         }
 
-        if (pokemonDAO.pokemonJaExiste(nome) == false) {
-            throw new Exception("Não há um Pokemon com esse nome registrado.");
+        if (pokemonDAO.buscarPorNome(nome).getId() != id) {
+            throw new Exception("Já existe outro Pokemon com esse nome registrado.");
         }
 
         Pokemon pokemon = new Pokemon(id, nome, tipoPrimario, tipoSecundario, nivel, hpMaximo, hpAtual);
         pokemonDAO.atualizar(pokemon);
+    }
+
+    public void cadastrarCargaMassiva() throws Exception {
+        JsonReader reader = new JsonReader();
+        List<Pokemon> pokemons = reader.lerPokemonsDoJson();
+        pokemonDAO.inserirCargaMassiva(pokemons);
     }
 
     public List<Pokemon> listarTodosPokemons() {
@@ -131,12 +139,7 @@ public class PokemonController {
         }
     }
 
-    public List<Pokemon> buscarPokemonsPorNome(String nome) {
+    public Pokemon buscarPokemonsPorNome(String nome) {
         return pokemonDAO.buscarPorNome(nome);
     }
-
-    public Pokemon pokemonGetNome(String nome) {
-        return buscarPokemonsPorNome(nome).get(0);
-    }
-
 }

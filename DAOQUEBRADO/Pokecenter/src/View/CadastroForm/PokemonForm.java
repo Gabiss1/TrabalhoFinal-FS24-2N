@@ -13,13 +13,13 @@ public class PokemonForm extends JInternalFrame {
     private TreinadorController treinadorController;
     private JTextField txtId, txtNome, txtTipoPrimario, txtTipoSecundario, txtNivel, txtHpMaximo, txtHpAtual, txtTreinadorNome;
     private JButton btnSalvar, btnBuscar;
-    private String pokemonNomeParaEdicao;
+    private Integer pokemonNomeParaEdicao;
 
-    public PokemonForm(PokemonController pokemonController,TreinadorController treinadorController, String pokemonNomeEditavel) {
+    public PokemonForm(PokemonController pokemonController,TreinadorController treinadorController, Integer idEditavel) {
         super("Cadastro de Pokémon", true, true, true, true);
         this.pokemonController = pokemonController;
         this.treinadorController = treinadorController;
-        this.pokemonNomeParaEdicao = pokemonNomeEditavel;
+        this.pokemonNomeParaEdicao = idEditavel;
 
         setSize(600, 400);
         setLayout(new GridBagLayout());
@@ -115,7 +115,7 @@ public class PokemonForm extends JInternalFrame {
         String nomePokemon = JOptionPane.showInputDialog(this, "Digite o nome do Pokémon para buscar:");
         if (nomePokemon != null && !nomePokemon.trim().isEmpty()) {
             try {
-                String nome = nomePokemon;
+                int nome = pokemonController.buscarPokemonsPorNome(nomePokemon).getId();
                 carregarPokemonParaEdicao(nome);
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(this, "Nome inválido. Por favor, digite um nome valido.", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -123,20 +123,20 @@ public class PokemonForm extends JInternalFrame {
         }
     }
 
-    private void carregarPokemonParaEdicao(String nome) {
+    private void carregarPokemonParaEdicao(Integer id) {
         try {
-            Pokemon pokemon = pokemonController.pokemonGetNome(nome);
+            Pokemon pokemon = pokemonController.buscarPokemonPorId(id);
             if (pokemon != null) {
                 txtId.setText(String.valueOf(pokemon.getId()));
-                txtNome.setText(pokemon.getName());
-                txtTipoPrimario.setText(pokemon.getTipoPrimario());
-                txtTipoSecundario.setText(pokemon.getTipoSecundario());
+                txtNome.setText(pokemon.getNome());
+                txtTipoPrimario.setText(pokemon.getTipo_primario());
+                txtTipoSecundario.setText(pokemon.getTipo_secundario());
                 txtNivel.setText(String.valueOf(pokemon.getNivel()));
                 txtHpMaximo.setText(String.valueOf(pokemon.getHp_maximo()));
                 txtHpAtual.setText(String.valueOf(pokemon.getHp_atual()));
-                pokemonNomeParaEdicao = pokemon.getName();
+                pokemonNomeParaEdicao = pokemon.getId();
             } else {
-                JOptionPane.showMessageDialog(this, "Pokémon com nome " + nome + " não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Pokémon com nome " + id + " não encontrado.", "Erro", JOptionPane.ERROR_MESSAGE);
                 limparCampos();
             }
         } catch (Exception ex) {
@@ -163,7 +163,7 @@ public class PokemonForm extends JInternalFrame {
                 pokemonController.cadastrarPokemon(nome, tipoPrimario, tipoSecundario, nivel, hpMaximo, hpAtual);
                 JOptionPane.showMessageDialog(this, "Pokémon cadastrado com sucesso!");
             } else {
-                pokemonController.atualizarPokemon(Integer.parseInt(pokemonNomeParaEdicao), nome, tipoPrimario, tipoSecundario, nivel, hpMaximo, hpAtual);
+                pokemonController.atualizarPokemon(pokemonNomeParaEdicao, nome, tipoPrimario, tipoSecundario, nivel, hpMaximo, hpAtual);
                 JOptionPane.showMessageDialog(this, "Pokémon atualizado com sucesso!");
             }
             this.dispose();
@@ -182,6 +182,7 @@ public class PokemonForm extends JInternalFrame {
         txtNivel.setText("");
         txtHpMaximo.setText("");
         txtHpAtual.setText("");
+        txtTreinadorNome.setText("");
         pokemonNomeParaEdicao = null;
         btnBuscar.setEnabled(true);
     }

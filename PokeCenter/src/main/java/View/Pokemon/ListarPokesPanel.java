@@ -15,8 +15,8 @@ public class ListarPokesPanel extends JInternalFrame {
     private TreinadorController treinadorController;
     private JTable tabelaPokemons;
     private DefaultTableModel tableModel;
-    private JButton btnAtualizar, btnRemover, btnBuscar, btnEditar;
-    private JTextField txtBuscaNome;
+    private JButton btnAtualizar, btnRemover, btnBuscar, btnEditar, btnBuscarPorTreinador;
+    private JTextField txtBuscaNome, txtBuscaTreinador;
 
     public ListarPokesPanel(PokemonController controller) {
         super("Lista de Pokémons", true, true, true, true);
@@ -38,8 +38,10 @@ public class ListarPokesPanel extends JInternalFrame {
         add(scrollPane, BorderLayout.CENTER);
 
         JPanel panelAcoes = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        txtBuscaNome = new JTextField(20);
-        btnBuscar = new JButton("Buscar por Nome");
+        txtBuscaNome = new JTextField(15);
+        txtBuscaTreinador = new JTextField(15);
+        btnBuscar = new JButton("Buscar por Pokémon");
+        btnBuscarPorTreinador = new JButton("Buscar por Treinador");
         btnAtualizar = new JButton("Atualizar Tabela");
         btnRemover = new JButton("Remover Selecionado");
         btnEditar = new JButton("Editar Selecionado");
@@ -47,6 +49,9 @@ public class ListarPokesPanel extends JInternalFrame {
         panelAcoes.add(new JLabel("Nome:"));
         panelAcoes.add(txtBuscaNome);
         panelAcoes.add(btnBuscar);
+        panelAcoes.add(new JLabel("Nome Treinador:"));
+        panelAcoes.add(txtBuscaTreinador);
+        panelAcoes.add(btnBuscarPorTreinador);
         panelAcoes.add(btnAtualizar);
         panelAcoes.add(btnRemover);
         panelAcoes.add(btnEditar);
@@ -56,6 +61,7 @@ public class ListarPokesPanel extends JInternalFrame {
         btnRemover.addActionListener(e -> removerPokemonSelecionado());
         btnBuscar.addActionListener(e -> buscarPokemonsPorNome());
         btnEditar.addActionListener(e -> editarPokemonSelecionado());
+        btnBuscarPorTreinador.addActionListener(e -> buscarPokemonsPorTreinador());
 
         carregarPokemonsNaTabela();
     }
@@ -64,16 +70,29 @@ public class ListarPokesPanel extends JInternalFrame {
         tableModel.setRowCount(0);
         java.util.List<Pokemon> pokemons = controller.listarTodosPokes();
         for (Pokemon pokemon : pokemons) {
-            tableModel.addRow(new Object[]{
-                    pokemon.getId(),
-                    pokemon.getNome(),
-                    pokemon.getTipo_primario(),
-                    pokemon.getTipo_secundario() != null ? pokemon.getTipo_secundario() : "",
-                    pokemon.getNivel(),
-                    pokemon.getHp_maximo(),
-                    pokemon.getHp_atual(),
-                    treinadorController.getTreinadorById(pokemon.getFk_id_treinador()).getNome()
-            });
+            if (!pokemon.getFkNull()) {
+                tableModel.addRow(new Object[]{
+                        pokemon.getId(),
+                        pokemon.getNome(),
+                        pokemon.getTipo_primario(),
+                        pokemon.getTipo_secundario() != null ? pokemon.getTipo_secundario() : "",
+                        pokemon.getNivel(),
+                        pokemon.getHp_maximo(),
+                        pokemon.getHp_atual(),
+                        treinadorController.getTreinadorById(pokemon.getFk_id_treinador()).getNome()
+                });
+            } else {
+                tableModel.addRow(new Object[]{
+                        pokemon.getId(),
+                        pokemon.getNome(),
+                        pokemon.getTipo_primario(),
+                        pokemon.getTipo_secundario() != null ? pokemon.getTipo_secundario() : "",
+                        pokemon.getNivel(),
+                        pokemon.getHp_maximo(),
+                        pokemon.getHp_atual(),
+                        "Sem Treinador"
+                });
+            }
         }
     }
 
@@ -110,16 +129,66 @@ public class ListarPokesPanel extends JInternalFrame {
         }
 
         for (Pokemon pokemon : pokemons) {
-            tableModel.addRow(new Object[]{
-                    pokemon.getId(),
-                    pokemon.getNome(),
-                    pokemon.getTipo_primario(),
-                    pokemon.getTipo_secundario() != null ? pokemon.getTipo_secundario() : "",
-                    pokemon.getNivel(),
-                    pokemon.getHp_maximo(),
-                    pokemon.getHp_atual(),
-                    treinadorController.getTreinadorById(pokemon.getFk_id_treinador()).getNome()
-            });
+            if (!pokemon.getFkNull()) {
+                tableModel.addRow(new Object[]{
+                        pokemon.getId(),
+                        pokemon.getNome(),
+                        pokemon.getTipo_primario(),
+                        pokemon.getTipo_secundario() != null ? pokemon.getTipo_secundario() : "",
+                        pokemon.getNivel(),
+                        pokemon.getHp_maximo(),
+                        pokemon.getHp_atual(),
+                        treinadorController.getTreinadorById(pokemon.getFk_id_treinador()).getNome()
+                });
+            } else {
+                tableModel.addRow(new Object[]{
+                        pokemon.getId(),
+                        pokemon.getNome(),
+                        pokemon.getTipo_primario(),
+                        pokemon.getTipo_secundario() != null ? pokemon.getTipo_secundario() : "",
+                        pokemon.getNivel(),
+                        pokemon.getHp_maximo(),
+                        pokemon.getHp_atual(),
+                        "Sem Treinador"
+                });
+            }
+        }
+    }
+
+    private void buscarPokemonsPorTreinador() {
+        String nomeBusca = txtBuscaTreinador.getText().trim();
+        tableModel.setRowCount(0);
+
+        List<Pokemon> pokemons = controller.getPokemonByTreinador(nomeBusca);
+
+        if (pokemons.isEmpty() && !nomeBusca.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nenhum Pokémon encontrado com o nome: '" + nomeBusca + "'", "Busca", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        for (Pokemon pokemon : pokemons) {
+            if (!pokemon.getFkNull()) {
+                tableModel.addRow(new Object[]{
+                        pokemon.getId(),
+                        pokemon.getNome(),
+                        pokemon.getTipo_primario(),
+                        pokemon.getTipo_secundario() != null ? pokemon.getTipo_secundario() : "",
+                        pokemon.getNivel(),
+                        pokemon.getHp_maximo(),
+                        pokemon.getHp_atual(),
+                        treinadorController.getTreinadorById(pokemon.getFk_id_treinador()).getNome()
+                });
+            } else {
+                tableModel.addRow(new Object[]{
+                        pokemon.getId(),
+                        pokemon.getNome(),
+                        pokemon.getTipo_primario(),
+                        pokemon.getTipo_secundario() != null ? pokemon.getTipo_secundario() : "",
+                        pokemon.getNivel(),
+                        pokemon.getHp_maximo(),
+                        pokemon.getHp_atual(),
+                        "Sem Treinador"
+                });
+            }
         }
     }
 

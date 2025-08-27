@@ -2,43 +2,43 @@ package Model;
 
 public class Pokemon {
     private int id;
-    private String name;
-    private String tipoPrimario;
-    private String tipoSecundario;
+    private String nome;
+    private String tipo_primario;
+    private String tipo_secundario;
     private int nivel;
     private int hp_maximo;
     private int hp_atual;
-    private int fk_id_treinador;
+    private Integer fk_id_treinador;
 
     public Pokemon() {
     }
 
     //Constructor Para Cadastro POKEMON
-    public Pokemon(String name, String tipoPrimario, String tipoSecundario, int nivel, int hp_maximo, int hp_atual) {
-        this.name = name;
-        this.tipoPrimario = tipoPrimario;
-        this.tipoSecundario = tipoSecundario;
+    public Pokemon(String nome, String tipo_primario, String tipo_secundario, int nivel, int hp_maximo, int hp_atual) {
+        this.nome = nome;
+        this.tipo_primario = tipo_primario;
+        this.tipo_secundario = tipo_secundario;
         this.nivel = nivel;
         this.hp_maximo = hp_maximo;
         this.hp_atual = hp_atual;
     }
 
     //Constructor Para Edicao De POKEMON
-    public Pokemon(int id, String name, String tipoPrimario, String tipoSecundario, int nivel, int hp_maximo, int hp_atual) {
+    public Pokemon(int id, String nome, String tipo_primario, String tipo_secundario, int nivel, int hp_maximo, int hp_atual) {
         this.id = id;
-        this.name = name;
-        this.tipoPrimario = tipoPrimario;
-        this.tipoSecundario = tipoSecundario;
+        this.nome = nome;
+        this.tipo_primario = tipo_primario;
+        this.tipo_secundario = tipo_secundario;
         this.nivel = nivel;
         this.hp_maximo = hp_maximo;
         this.hp_atual = hp_atual;
     }
 
     //Constructor Para Cadastrar POKEMON com TREINADOR
-    public Pokemon(String name, String tipoPrimario, String tipoSecundario, int nivel, int hp_maximo, int hp_atual, int fk_id_treinador) {
-        this.name = name;
-        this.tipoPrimario = tipoPrimario;
-        this.tipoSecundario = tipoSecundario;
+    public Pokemon(String nome, String tipo_primario, String tipo_secundario, int nivel, int hp_maximo, int hp_atual, int fk_id_treinador) {
+        this.nome = nome;
+        this.tipo_primario = tipo_primario;
+        this.tipo_secundario = tipo_secundario;
         this.nivel = nivel;
         this.hp_maximo = hp_maximo;
         this.hp_atual = hp_atual;
@@ -46,11 +46,11 @@ public class Pokemon {
     }
 
     //Constructor Para Edicao POKEMON com TREINADOR
-    public Pokemon(int id, String name, String tipoPrimario, String tipoSecundario, int nivel, int hp_maximo, int hp_atual, int fk_id_treinador) {
+    public Pokemon(int id, String nome, String tipo_primario, String tipo_secundario, int nivel, int hp_maximo, int hp_atual, int fk_id_treinador) {
         this.id = id;
-        this.name = name;
-        this.tipoPrimario = tipoPrimario;
-        this.tipoSecundario = tipoSecundario;
+        this.nome = nome;
+        this.tipo_primario = tipo_primario;
+        this.tipo_secundario = tipo_secundario;
         this.nivel = nivel;
         this.hp_maximo = hp_maximo;
         this.hp_atual = hp_atual;
@@ -60,14 +60,14 @@ public class Pokemon {
     public int getId() {
         return id;
     }
-    public String getName() {
-        return name;
+    public String getNome() {
+        return nome;
     }
-    public String getTipoPrimario() {
-        return tipoPrimario;
+    public String getTipo_primario() {
+        return tipo_primario;
     }
-    public String getTipoSecundario() {
-        return tipoSecundario;
+    public String getTipo_secundario() {
+        return tipo_secundario;
     }
     public int getNivel() {
         return nivel;
@@ -81,18 +81,21 @@ public class Pokemon {
     public int getFk_id_treinador() {
         return fk_id_treinador;
     }
+    public boolean verificarFkNull(){
+        return fk_id_treinador == null;
+    }
 
     public void setId(int id) {
         this.id = id;
     }
-    public void setName(String name) {
-        this.name = name;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
-    public void setTipoPrimario(String tipoPrimario) {
-        this.tipoPrimario = tipoPrimario;
+    public void setTipo_primario(String tipo_primario) {
+        this.tipo_primario = tipo_primario;
     }
-    public void setTipoSecundario(String tipoSecundario) {
-        this.tipoSecundario = tipoSecundario;
+    public void setTipo_secundario(String tipo_secundario) {
+        this.tipo_secundario = tipo_secundario;
     }
     public void setNivel(int nivel) {
         this.nivel = nivel;
@@ -105,5 +108,8 @@ public class Pokemon {
     }
     public void setFk_id_treinador(int fk_id_treinador) {
         this.fk_id_treinador = fk_id_treinador;
+    }
+    public void setFkNull(){
+        this.fk_id_treinador = null;
     }
 }

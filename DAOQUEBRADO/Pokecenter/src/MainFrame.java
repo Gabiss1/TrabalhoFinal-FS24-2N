@@ -4,6 +4,8 @@ import View.CadastroForm.PokemonForm;
 import View.CadastroPanel.PokemonPanel;
 
 import javax.swing.*;
+import java.io.IOException;
+import java.sql.SQLException;
 
 public class MainFrame extends JFrame {
 
@@ -34,13 +36,22 @@ public class MainFrame extends JFrame {
         JMenuItem itemCadastrarPokemon = new JMenuItem("Cadastrar Pokémon");
         JMenuItem itemCadastrarTreinador = new JMenuItem("Cadastrar Treinador");
         JMenuItem itemListarPokemons = new JMenuItem("Listar Pokémons");
+        JMenuItem cadastrarListaDePokemons = new JMenuItem("Cadastar Lista de Pokémons");
         JMenuItem itemListarTreinadores = new JMenuItem("Listar Treinadores");
 
         itemCadastrarPokemon.addActionListener(e -> openPokemonForm(null));
         itemListarPokemons.addActionListener(e -> openListaPokemonsPanel());
+        cadastrarListaDePokemons.addActionListener(e-> {
+            try {
+                openCadastrarCargaMassiva();
+            } catch (Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        });
 
         menuPokemons.add(itemCadastrarPokemon);
         menuPokemons.add(itemListarPokemons);
+        menuPokemons.add(cadastrarListaDePokemons);
 
         menuBar.add(menuPokemons);
 
@@ -55,8 +66,8 @@ public class MainFrame extends JFrame {
         setJMenuBar(menuBar);
     }
 
-    private void openPokemonForm(String nomePokemon) {
-        PokemonForm pokemonForm = new PokemonForm(pokemonController,treinadorController, nomePokemon);
+    private void openPokemonForm(Integer idPokemon) {
+        PokemonForm pokemonForm = new PokemonForm(pokemonController,treinadorController, idPokemon);
         desktopPane.add(pokemonForm);
         pokemonForm.setVisible(true);
         pokemonForm.toFront();
@@ -69,6 +80,14 @@ public class MainFrame extends JFrame {
         listaPokemons.toFront();
     }
 
+    public void openCadastrarCargaMassiva() throws Exception {
+        PokemonController pokemonController = new PokemonController();
+        pokemonController.cadastrarCargaMassiva();
+        PokemonPanel listaPokemons = new PokemonPanel(pokemonController, treinadorController);
+        desktopPane.add(listaPokemons);
+        listaPokemons.setVisible(true);
+        listaPokemons.toFront();
+    }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
