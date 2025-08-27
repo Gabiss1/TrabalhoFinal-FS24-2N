@@ -10,7 +10,7 @@ import java.util.List;
 public class TreinadorDAO {
 
     public void inserir(Treinador treinador) throws SQLException {
-        String sql = "INSERT INTO pokemons (nome, cidade) VALUES (?, ?)";
+        String sql = "INSERT INTO treinador (nome, cidade) VALUES (?, ?)";
         try (Connection conn = ConexaoPostgresDB.conectar();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, treinador.getNome());
@@ -50,7 +50,7 @@ public class TreinadorDAO {
 
     public List<Treinador> listarTodos() {
         List<Treinador> pokemons = new ArrayList<>();
-        String sql = "SELECT * FROM pokemons ORDER BY nome";
+        String sql = "SELECT * FROM treinador ORDER BY nome";
         try (Connection conn = ConexaoPostgresDB.conectar();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {

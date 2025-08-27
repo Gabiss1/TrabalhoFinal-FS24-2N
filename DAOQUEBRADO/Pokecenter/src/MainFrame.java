@@ -1,11 +1,12 @@
 import Controller.PokemonController;
 import Controller.TreinadorController;
+import Model.DAO.TreinadorDAO;
 import View.CadastroForm.PokemonForm;
+import View.CadastroForm.TreinadorForm;
 import View.CadastroPanel.PokemonPanel;
+import View.CadastroPanel.TreinadorPanel;
 
 import javax.swing.*;
-import java.io.IOException;
-import java.sql.SQLException;
 
 public class MainFrame extends JFrame {
 
@@ -16,7 +17,7 @@ public class MainFrame extends JFrame {
     public MainFrame() {
         super("Pokecenter");
         this.pokemonController = new PokemonController();
-        this.treinadorController = new TreinadorController();
+        this.treinadorController = new TreinadorController(new TreinadorDAO());
 
         setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -34,9 +35,11 @@ public class MainFrame extends JFrame {
         // Menu Pokémons
         JMenu menuPokemons = new JMenu("Pokémons");
         JMenuItem itemCadastrarPokemon = new JMenuItem("Cadastrar Pokémon");
-        JMenuItem itemCadastrarTreinador = new JMenuItem("Cadastrar Treinador");
         JMenuItem itemListarPokemons = new JMenuItem("Listar Pokémons");
         JMenuItem cadastrarListaDePokemons = new JMenuItem("Cadastar Lista de Pokémons");
+
+        JMenu menuTreinador = new JMenu("Treinadores");
+        JMenuItem itemCadastrarTreinador = new JMenuItem("Cadastrar Treinador");
         JMenuItem itemListarTreinadores = new JMenuItem("Listar Treinadores");
 
         itemCadastrarPokemon.addActionListener(e -> openPokemonForm(null));
@@ -53,7 +56,14 @@ public class MainFrame extends JFrame {
         menuPokemons.add(itemListarPokemons);
         menuPokemons.add(cadastrarListaDePokemons);
 
+        itemCadastrarTreinador.addActionListener(e-> openTreinadorForm(null));
+        itemListarTreinadores.addActionListener(e-> openListaTreinadoresPanel());
+
+        menuTreinador.add(itemCadastrarTreinador);
+        menuTreinador.add(itemListarTreinadores);
+
         menuBar.add(menuPokemons);
+        menuBar.add(menuTreinador);
 
         // Menu Sair
         JMenu menuSair = new JMenu("Sair");
@@ -87,6 +97,20 @@ public class MainFrame extends JFrame {
         desktopPane.add(listaPokemons);
         listaPokemons.setVisible(true);
         listaPokemons.toFront();
+    }
+
+    private void openTreinadorForm(Integer idTreinador) {
+        TreinadorForm treinadorForm = new TreinadorForm(treinadorController, idTreinador);
+        desktopPane.add(treinadorForm);
+        treinadorForm.setVisible(true);
+        treinadorForm.toFront();
+    }
+
+    private void openListaTreinadoresPanel() {
+        TreinadorPanel listaTreinadores = new TreinadorPanel(treinadorController);
+        desktopPane.add(listaTreinadores);
+        listaTreinadores.setVisible(true);
+        listaTreinadores.toFront();
     }
 
     public static void main(String[] args) {

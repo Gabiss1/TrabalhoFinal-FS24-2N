@@ -10,7 +10,7 @@ import java.util.List;
 public class TreinadorController {
     private TreinadorDAO treinadorDAO;
 
-    public TreinadorController() {
+    public TreinadorController(TreinadorDAO treinadorDAO) {
         this.treinadorDAO = treinadorDAO;
     }
 
@@ -42,7 +42,7 @@ public class TreinadorController {
             throw new Exception("A cidade do treinador não pode estar vazia.");
         }
 
-        if (treinadorDAO.treinadorJaExiste(nome) == false){
+        if (!treinadorDAO.treinadorJaExiste(nome)){
             throw new Exception("Não há um treinador registrado com este nome.");
         }
 
@@ -50,7 +50,7 @@ public class TreinadorController {
         treinadorDAO.atualizar(treinador);
     }
 
-    public List<Treinador> listarTreinadores(Treinador treinador){
+    public List<Treinador> listarTreinadores(){
         return treinadorDAO.listarTodos();
     }
 
@@ -61,7 +61,7 @@ public class TreinadorController {
         }
 
         try {
-            if (!treinadorDAO.treinadorJaExiste(nome)) {
+            if (treinadorDAO.treinadorJaExiste(nome)) {
                 treinadorDAO.remover(id);
             };
         } catch (SQLException e) {
@@ -69,8 +69,8 @@ public class TreinadorController {
         }
     }
 
-    public List<Treinador> buscarTreinadorPorNome(String nome) {
-        return treinadorDAO.buscarPorNome(nome);
+    public Treinador buscarTreinadorPorNome(String nome) {
+        return treinadorDAO.buscarPorNome(nome).getFirst();
     }
 
     public Treinador buscarTreinadorPorId(int id) {
