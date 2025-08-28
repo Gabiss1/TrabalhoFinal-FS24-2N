@@ -85,10 +85,19 @@ public class Main extends JFrame {
 
         JMenu menuPokeCenter = new JMenu("Pokecenter");
         JMenuItem itemCurarPokes = new JMenuItem("Curar Pokémons");
-        JMenuItem itemAdotarPoke = new JMenuItem("Adotar Pokémon");
+        //JMenuItem itemAdotarPoke = new JMenuItem("Adotar Pokémon");
 
         menuPokeCenter.add(itemCurarPokes);
-        menuPokeCenter.add(itemAdotarPoke);
+        //menuPokeCenter.add(itemAdotarPoke);
+
+        itemCurarPokes.addActionListener(e-> {
+            try {
+                curarEmLote();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
+        });
+        menuBar.add(menuPokeCenter);
 
         // Menu Sair
         JMenu menuSair = new JMenu("Sair");
@@ -119,15 +128,22 @@ public class Main extends JFrame {
         JsonReader reader = new JsonReader();
         try{
             List<Pokemon> pokemons = reader.lerPokemonsDoJson();
-
-            for (int i = 0; i < pokemons.size(); i++){
-                //pokemons.get(i).setFk_id_treinador(null);
-                pokemons.get(i).setId(i+1);
-            }
             pokemonController.cadastrarEmLote(pokemons);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+        ListarPokesPanel listaPokemons = new ListarPokesPanel(pokemonController);
+        desktopPane.add(listaPokemons);
+        listaPokemons.setVisible(true);
+        listaPokemons.toFront();
+    }
+
+    private void curarEmLote() throws IOException {
+        pokemonController.curarTodosPokes(pokemonController.listarTodosPokes());
+        ListarPokesPanel listaPokemons = new ListarPokesPanel(pokemonController);
+        desktopPane.add(listaPokemons);
+        listaPokemons.setVisible(true);
+        listaPokemons.toFront();
     }
 
     private void openTreinadorForm(Integer idTreinador) throws Exception {

@@ -70,10 +70,10 @@ public class PokemonController {
         ObjectMapper mapper = new ObjectMapper();
         try (Session session = HibernateUtil.getSessionFactory().openSession()){
             transaction = session.beginTransaction();
-            mapper.writeValue(new
-                    File("C:\\Users\\GABRIEL\\Documents\\TrabalhoFinal-FS24-2N\\PokeCenter\\src\\main\\resources\\pokemons.json"), pokemons);
 //            mapper.writeValue(new
-//                    File("C:\\Users\\GABRIELGARCEZDEOLIVE\\Documents\\Atividades-FS24-2N\\TrabalhoFinal-FS24-2N\\PokeCenter\\src\\main\\resources\\pokemons.json"), pokemons);
+//                    File("C:\\Users\\GABRIEL\\Documents\\TrabalhoFinal-FS24-2N\\PokeCenter\\src\\main\\resources\\pokemons.json"), pokemons);
+            mapper.writeValue(new
+                    File("C:\\Users\\GABRIELGARCEZDEOLIVE\\Documents\\Atividades-FS24-2N\\TrabalhoFinal-FS24-2N\\PokeCenter\\src\\main\\resources\\pokemons.json"), pokemons);
             System.out.println(pokemons.get(2).getNome());
             for(Pokemon poke : pokemons){
                 System.out.println(poke.getNome());
@@ -85,6 +85,21 @@ public class PokemonController {
         } catch (IOException e) {
             System.out.println("Houve um erro ao salvar o arquivo.");
             e.printStackTrace();
+        }
+    }
+
+    public void curarTodosPokes(List<Pokemon> pokemons){
+        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()){
+            transaction = session.beginTransaction();
+            for(Pokemon poke : pokemons){
+                poke.setHp_atual(poke.getHp_maximo());
+                session.merge(poke);
+            }
+            session.flush();
+            transaction.commit();
+        } catch (Exception e) {
+            System.out.println("Houve um erro ao salvar o arquivo: "+ e.getMessage());
         }
     }
 
@@ -201,7 +216,4 @@ public class PokemonController {
         }
     }
 
-    public void curarPokes(){
-
-    }
 }
